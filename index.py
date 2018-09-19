@@ -18,6 +18,18 @@ LOG = logger.get_root_logger(os.environ.get(
 # Port variable to run the server on.
 PORT = os.environ.get('PORT')
 
+incomes = [
+  { 'description': 'salary', 'amount': 5000 }
+]
+
+@app.route('/incomes')
+def get_incomes():
+  return jsonify(incomes)
+
+@app.route('/incomes', methods=['POST'])
+def add_income():
+  incomes.append(request.get_json())
+  return '', 204
 
 @app.errorhandler(404)
 def not_found(error):
@@ -32,12 +44,12 @@ def index():
     return send_from_directory('dist', 'index.html')
 
 
-@app.route('/<path:path>')
-def static_proxy(path):
-    """ static folder serve """
-    file_name = path.split('/')[-1]
-    dir_name = os.path.join('dist', '/'.join(path.split('/')[:-1]))
-    return send_from_directory(dir_name, file_name)
+#@app.route('/<path:path>')
+#def static_proxy(path):
+#    """ static folder serve """
+#    file_name = path.split('/')[-1]
+#    dir_name = os.path.join('dist', '/'.join(path.split('/')[:-1]))
+#    return send_from_directory(dir_name, file_name)
 
 
 if __name__ == '__main__':
